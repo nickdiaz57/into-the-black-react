@@ -14,9 +14,14 @@ import EndScreen from './components/end/endScreen';
 //player should proceed to end screen route after game completion
 //nest game route to be /user/id:/play, same with end screen
 
+//move Into the Black title into header, format properly
+
 function App() {
   return (
     <div className="App">
+      <header className="App-header">
+        <h1>Into the Black</h1>
+      </header>
       <main>
       <Router>
         <Switch>

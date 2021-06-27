@@ -6,7 +6,7 @@ export default class WelcomeScreen extends Component {
     render() {
         return(
             <>
-                <h1>Into the Black</h1>
+                <h3>Welcome, Commander.</h3>
                 <NameForm/>
             </>
         )

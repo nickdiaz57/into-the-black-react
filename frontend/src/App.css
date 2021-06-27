@@ -2,6 +2,29 @@
   text-align: center;
 }
 
+/* ************************* */
+
+:root {
+  --grid-cols: 30;
+  --grid-rows: 30;
+}
+
+.map {
+  display: grid;
+  /* grid-gap: 1em; */
+  grid-template-rows: repeat(var(--grid-rows), 1fr);
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+  text-align: center
+}
+
+.grid-item {
+  padding: 1em;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+/* ************************ */
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -15,7 +38,7 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   display: flex;
   flex-direction: column;
   align-items: center;
