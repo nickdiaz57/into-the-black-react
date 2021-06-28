@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Map from './map';
+import { connect } from 'react-redux';
 
-export default class GameContainer extends Component {
+class GameContainer extends Component {
 
+    //inventory panel, text boxes and buttons, message feed
     render() {
         return(
             <div>
@@ -12,3 +15,5 @@ export default class GameContainer extends Component {
         )
     }
 }
+
+export default connect()(GameContainer)

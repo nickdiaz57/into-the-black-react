@@ -3,7 +3,8 @@ import React from 'react'
 export default function Tile(props) {
     return (
         <p>
-            {props.xcoord},{props.ycoord}
+            {/*{props.xcoord},{props.ycoord}*/}
+            .
         </p>
     )
 }

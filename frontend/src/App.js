@@ -6,7 +6,6 @@ import {
   Link
 } from 'react-router-dom';
 
-
 import WelcomeScreen from './components/welcome/welcomeScreen'
 import GameContainer from './components/game/gameContainer';
 import EndScreen from './components/end/endScreen';
