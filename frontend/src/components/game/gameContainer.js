@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Map from './map';
-import { connect } from 'react-redux';
 
 class GameContainer extends Component {
 

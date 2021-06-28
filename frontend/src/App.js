@@ -17,12 +17,26 @@ import EndScreen from './components/end/endScreen';
 
 function App() {
   return (
+        <Router>
     <div className="App">
       <header className="App-header">
         <h1>Into the Black</h1>
+
+        {/* placeholder */}
+        <div>
+          <Link to='/'>Welcome Screen</Link>
+        </div>
+        <div>
+          <Link to='/play'>Game Container</Link>
+        </div>
+        <div>
+          <Link to='/end'>End Screen</Link>
+        </div>
+        {/* placeholder */}
+
       </header>
       <main>
-      <Router>
+      {/*<Router>*/}
         <Switch>
           <Route exact path='/'>
             <WelcomeScreen/>
@@ -34,9 +48,10 @@ function App() {
             <EndScreen/>
           </Route>
         </Switch>
-      </Router>
+      {/*</Router>*/}
       </main>
     </div>
+    </Router>
   );
 }
 
