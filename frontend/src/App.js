@@ -17,7 +17,7 @@ import EndScreen from './components/end/endScreen';
 
 function App() {
   return (
-        <Router>
+        <Router> {/* delete when placeholder routes not needed */}
     <div className="App">
       <header className="App-header">
         <h1>Into the Black</h1>
@@ -51,7 +51,8 @@ function App() {
       {/*</Router>*/}
       </main>
     </div>
-    </Router>
+    {/* delete when placeholder routes not needed */}
+    </Router> 
   );
 }
 

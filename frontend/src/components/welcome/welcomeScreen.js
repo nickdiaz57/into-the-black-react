@@ -7,7 +7,7 @@ class WelcomeScreen extends Component {
     
     headers = {"Accepts": "application/json", "Content-Type": "application/json"}
 
-    setUser = (userName) => {//reeeeeedux
+    getUser = (userName) => {
         const url = 'http://localhost:3001/users'
 
         return fetch(url, {
@@ -15,8 +15,7 @@ class WelcomeScreen extends Component {
             headers: this.headers,
             body: JSON.stringify({name: userName})
         }).then(r => r.json())
-        .then(console.log)//send to reducer to set active user
-        //recheck serializer to make sure win and loss data is sent from backend with user
+        .then(json => this.props.setUser(json))
     }
 
 
@@ -24,14 +23,16 @@ class WelcomeScreen extends Component {
         return(
             <>
                 <h3>Welcome, Commander.</h3>
-                <NameForm setUser={this.setUser}/>
+                <NameForm getUser={this.getUser}/>
             </>
         )
     }
 }
 
-// const mapDispatchToProps = (state) => {
-//     return state//fetch user, then dispatch action SET_USER to reducer that sets user as the active user in state
-// }
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setUser: (user) => dispatch({type: 'SET_USER', payload: user})//action creator?
+    }
+}
 
-export default connect(null)(WelcomeScreen)
+export default connect(null, mapDispatchToProps)(WelcomeScreen)

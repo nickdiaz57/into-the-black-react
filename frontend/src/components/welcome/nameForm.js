@@ -8,7 +8,7 @@ export default class NameForm extends Component {
     
     handleSubmit= (e) => {
         e.preventDefault()
-        this.props.setUser(this.state.name)
+        this.props.getUser(this.state.name)
         this.setState({name: ""})
     }
 
