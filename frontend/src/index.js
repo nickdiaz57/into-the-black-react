@@ -5,10 +5,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import { Provider } from 'react-redux'
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk'
 import GameReducer from './redux/reducers/gameReducer';
 
-const store = createStore(GameReducer)
+const store = createStore(GameReducer, applyMiddleware(thunk))
 
 ReactDOM.render(
   <React.StrictMode>

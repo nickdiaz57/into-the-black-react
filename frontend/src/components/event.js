@@ -129,7 +129,7 @@ var Event = {
             'ambush': {
                 text: "As you open your hold and approach the cruiser, they deploy weapons. A trap!\nThey order you to surrender your scrap and some fuel.",
                 buttons: {
-                    'surrender': {value: "Give them what they want. (50 scrap, 50 fuel)", next: 'surrender', cost: {fuel: 50, scrap: 50}},
+                    'surrender': {value: "Give them what they want. (100 scrap, 50 fuel)", next: 'surrender', cost: {fuel: 50, scrap: 100}},
                     'escape': {value: "Try to escape.", next: 'damage'}
                 }
             },
@@ -328,7 +328,7 @@ var Event = {
     //         'decide': {
     //             text: "Countless advertisements roll across your terminal, but one catches your eye.\nA vendor offers to upgrade your ship's armor plating.",
     //             buttons: {
-    //                 'purchase': {value: 'Accept the offer.', next: 'buy armor', cost: {scrap: 50}},
+    //                 'purchase': {value: 'Accept the offer.', next: 'buy armor', cost: {scrap: 200}},
     //                 'ignore': {value: 'Ignore the advertisement.', next: 'end'}
     //             }
     //         },

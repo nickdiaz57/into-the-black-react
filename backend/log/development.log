@@ -225,3 +225,16 @@ Processing by UsersController#create as */*
 Completed 200 OK in 60ms (Views: 46.5ms | ActiveRecord: 11.2ms | Allocations: 6307)
 
 
+Started POST "/users" for ::1 at 2021-06-29 18:08:24 -0400
+  [1m[35m (5.5ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (2.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"name"=>"Shepard", "user"=>{"name"=>"Shepard"}}
+  [1m[36mUser Load (2.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."name" = ? LIMIT ?[0m  [["name", "Shepard"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:14:in `create'
+[active_model_serializers]   [1m[36mGame Load (2.3ms)[0m  [1m[34mSELECT "games".* FROM "games" WHERE "games"."user_id" = ?[0m  [["user_id", 3]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:16:in `create'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (92.09ms)
+Completed 200 OK in 162ms (Views: 136.2ms | ActiveRecord: 20.4ms | Allocations: 9041)
+
+

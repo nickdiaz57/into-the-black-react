@@ -1,4 +1,4 @@
-export default function GameReducer(state = {user: {}, position: [0,0]}, action) {
+export default function GameReducer(state = {user: {}, position: [0,0], tiles: []}, action) {
 
     switch (action.type){
         case 'MOVE_RIGHT':
@@ -10,7 +10,9 @@ export default function GameReducer(state = {user: {}, position: [0,0]}, action)
         case 'MOVE_DOWN':
             return {...state, position: [state.position[0], state.position[1] + action.payload]}
         case 'SET_USER': 
-            return {...state, user: action.payload}
+            return {...state, user: action.payload}//separate out
+        case 'CREATE_TILE':
+            return {...state, tiles: [...state.tiles, action.payload]}//id attribute
         default:
             return state
     }
