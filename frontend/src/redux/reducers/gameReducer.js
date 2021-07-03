@@ -1,5 +1,3 @@
-// const equals = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
-
 export default function GameReducer(state = {user: {}, position: [0,0], tiles: {}}, action) {
 
     switch (action.type){
@@ -15,8 +13,17 @@ export default function GameReducer(state = {user: {}, position: [0,0], tiles: {
             return {...state, user: action.payload}//separate out
         case 'CREATE_TILE':
             return {...state, tiles: {...state.tiles, [action.payload.key]: action.payload}}
-        // case 'CHANGE_ICON':
-        //     return {...state, tiles: {...state.tiles, [action.payload.key]: {...state.tiles[action.payload.key], icon: [action.payload.icon]}}}
+        case 'LAND_ON_TILE':
+            return {...state, tiles: {...state.tiles, [action.payload.key]: {...state.tiles[action.payload.key], occupied: !state.tiles[action.payload.key].occupied}}} 
+        // case 'UPDATE':
+        //     return {
+        //         ...state, 
+        //         tiles: {
+        //             ...state.tiles, 
+        //             state.tiles.filter(tile => tile.key === action.payload.key ? fuck : this)
+        //         },
+        //         icon:
+        //     }
         default:
             return state
     }

@@ -27,12 +27,12 @@ class Map extends Component {
         this.generateTiles()
     }
 
-    generateTiles = (sideLength=30) => {//change back to 30
+    generateTiles = (sideLength=5) => {//change back to 30
         let counter = 0
         for(let y = 0; y < sideLength; y++) {
             for(let x = 0; x < sideLength; x++) {
                 //decision on if a tile has an event or not and which icon it has should be made here
-                this.props.createTile({key: counter, defaultIcon: '.', playerIcon: '', eventIcon: '', occupied: false, xcoord: x, ycoord: y})
+                this.props.createTile({key: counter, defaultIcon: '.', playerIcon: '@', eventIcon: '', occupied: false, xcoord: x, ycoord: y})
                 counter++
             }
         }
@@ -53,10 +53,9 @@ class Map extends Component {
         return tileArr
     }
 
-    // handleMove = () => {
-    //     let target = this.props.tiles[0]
-    //     this.props.changeIcon(target, 'Hello')
-    // }
+    handleMove = () => {
+        this.props.landOnTile(0)
+    }
     //instead of trying to change the icon in the state, try adding multiple possible icon values in each tile and switching which
     //one renders based on if an event is present or if the tile is occupied or visited
 
@@ -64,15 +63,13 @@ class Map extends Component {
         return(
             <div className='map'>
                 {this.displayTiles()}
+                <button onClick={this.handleMove}>Start</button>
             </div>
         )
     }
-//on rerender, map through this.props.tiles and render grid that way
 }
 
-const mapStateToProps = (state) => {//map rerenders every time these particular pieces of state change
-    //after rerender map rerender tiles
-    //map remembers each tile and their icons and events and coordinates
+const mapStateToProps = (state) => {
     return {
         position: state.position,
         tiles: state.tiles
@@ -81,8 +78,8 @@ const mapStateToProps = (state) => {//map rerenders every time these particular 
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        createTile: (tile) => dispatch({type: 'CREATE_TILE', payload: tile})
-        // changeIcon: (tile, icon) => dispatch({type:'CHANGE_ICON', payload: {tile, icon}})
+        createTile: (tile) => dispatch({type: 'CREATE_TILE', payload: tile}),
+        landOnTile: (key) => dispatch({type:'LAND_ON_TILE', payload: {key}})
     }
 }
 
