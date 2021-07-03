@@ -5,11 +5,11 @@ import { connect } from 'react-redux'
 function Tile(props) {
     return (
         <p>
-            {props.icon}
+            {props.occupied ? props.playerIcon : props.eventIcon ? props.eventIcon : props.defaultIcon}
         </p>
     )
 }
 
 //map dispatch
 export default connect()(Tile)
-// export default Tile
+//default icon, event icon, player icon

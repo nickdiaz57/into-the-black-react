@@ -1,4 +1,6 @@
-export default function GameReducer(state = {user: {}, position: [0,0], tiles: []}, action) {
+// const equals = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
+
+export default function GameReducer(state = {user: {}, position: [0,0], tiles: {}}, action) {
 
     switch (action.type){
         case 'MOVE_RIGHT':
@@ -12,7 +14,9 @@ export default function GameReducer(state = {user: {}, position: [0,0], tiles: [
         case 'SET_USER': 
             return {...state, user: action.payload}//separate out
         case 'CREATE_TILE':
-            return {...state, tiles: [...state.tiles, action.payload]}//id attribute
+            return {...state, tiles: {...state.tiles, [action.payload.key]: action.payload}}
+        // case 'CHANGE_ICON':
+        //     return {...state, tiles: {...state.tiles, [action.payload.key]: {...state.tiles[action.payload.key], icon: [action.payload.icon]}}}
         default:
             return state
     }
