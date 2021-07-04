@@ -1,4 +1,4 @@
-export default function GameReducer(state = {user: {}, position: [0,0], tiles: {}}, action) {
+export default function GameReducer(state = {user: {}, position: [0,0], tiles: []}, action) {
 
     switch (action.type){
         case 'MOVE_RIGHT':
@@ -12,9 +12,19 @@ export default function GameReducer(state = {user: {}, position: [0,0], tiles: {
         case 'SET_USER': 
             return {...state, user: action.payload}//separate out
         case 'CREATE_TILE':
-            return {...state, tiles: {...state.tiles, [action.payload.key]: action.payload}}
+            // return {...state, tiles: {...state.tiles, [action.payload.key]: action.payload}}
+            return {...state, tiles: [...state.tiles, action.payload]}
         case 'LAND_ON_TILE':
-            return {...state, tiles: {...state.tiles, [action.payload.key]: {...state.tiles[action.payload.key], occupied: !state.tiles[action.payload.key].occupied}}} 
+            // let target = state.tiles[action.payload.key]
+            // target.occupied = !target.occupied
+            let newTiles = state.tiles
+            newTiles.splice(action.payload.key, 1, {...newTiles[action.payload.key], occupied: !newTiles[action.payload.key].occupied})
+            return {...state, tiles: newTiles//tiles: {
+                        //     ...state.tiles, [action.payload.key]: {
+                        //         ...state.tiles[action.payload.key], occupied: !state.tiles[action.payload.key].occupied
+                        //     }
+                        // }
+                    } 
         // case 'UPDATE':
         //     return {
         //         ...state, 

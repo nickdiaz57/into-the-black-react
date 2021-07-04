@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Tile from './tile';
+// import Event from './event'
 
 // const equals = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
 // const seed = {//add back events at later date
@@ -23,8 +24,14 @@ class Map extends Component {
     //create tiles, distribute events, add player to map, all when component mounts
     //map can keep track of the active tile with local state
 
+    state = {
+        position: [0,0]
+    }
+
     componentDidMount = () => {
         this.generateTiles()
+        this.props.landOnTile(0)
+        window.addEventListener('keydown', this.handleMove)//consider moving event listener up to game container
     }
 
     generateTiles = (sideLength=5) => {//change back to 30
@@ -32,38 +39,64 @@ class Map extends Component {
         for(let y = 0; y < sideLength; y++) {
             for(let x = 0; x < sideLength; x++) {
                 //decision on if a tile has an event or not and which icon it has should be made here
-                this.props.createTile({key: counter, defaultIcon: '.', playerIcon: '@', eventIcon: '', occupied: false, xcoord: x, ycoord: y})
+                //change hidden attribute back to true once tile reveal method works
+                this.props.createTile({key: counter, defaultIcon: '.', playerIcon: '@', eventIcon: '', occupied: false, hidden: false, xcoord: x, ycoord: y})
                 counter++
             }
         }
     }
 
-    displayTiles = () => {
-        let tileArr = []
-        for(let t in this.props.tiles) {
-            tileArr.push(<Tile
-                 key={this.props.tiles[t].key}
-                 defaultIcon={this.props.tiles[t].defaultIcon} 
-                 playerIcon={this.props.tiles[t].playerIcon}
-                 eventIcon={this.props.tiles[t].eventIcon}
-                 occupied={this.props.tiles[t].occupied}
-                 xcoord={this.props.tiles[t].xcoord} 
-                 ycoord={this.props.tiles[t].ycoord}/>)
+    handleMove = (e) => {//pass up previous tile to return it to unoccupied status
+
+        switch (e.key) {
+            case 'ArrowUp':
+                if (this.state.position[1] > 0){
+                    this.setState({position: [this.state.position[0], this.state.position[1] - 1]})
+                }
+                console.log(this.state.position)
+                break;
+            case 'ArrowDown':
+                if (this.state.position[1] < 29){
+                    this.setState({position: [this.state.position[0], this.state.position[1] + 1]})
+                }
+                console.log(this.state.position)
+                break;
+            case 'ArrowRight':
+                if (this.state.position[0] < 29){
+                    this.setState({position: [this.state.position[0] + 1, this.state.position[1]]})
+                }
+                console.log(this.state.position)
+                break;
+            case 'ArrowLeft':
+                if (this.state.position[0] > 0){
+                    this.setState({position: [this.state.position[0] - 1, this.state.position[1]]})
+                }
+                console.log(this.state.position)
+                break;
+            default:
+                return
         }
-        return tileArr
     }
 
-    handleMove = () => {
-        this.props.landOnTile(0)
+    componentWillUnmount = () => {
+        window.removeEventListener('keydown', this.handleMove)
+        //clear out tiles from state, reset position to 0,0
     }
-    //instead of trying to change the icon in the state, try adding multiple possible icon values in each tile and switching which
-    //one renders based on if an event is present or if the tile is occupied or visited
 
     render() {
         return(
             <div className='map'>
-                {this.displayTiles()}
-                <button onClick={this.handleMove}>Start</button>
+                {this.props.tiles.map(t => {
+                    return <Tile
+                        key={t.key}
+                        defaultIcon={t.defaultIcon} 
+                        playerIcon={t.playerIcon}
+                        eventIcon={t.eventIcon}
+                        occupied={t.occupied}
+                        hidden={t.hidden}
+                        xcoord={t.xcoord} 
+                        ycoord={t.ycoord}/>
+                })}
             </div>
         )
     }
@@ -71,7 +104,7 @@ class Map extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        position: state.position,
+        // position: state.position,
         tiles: state.tiles
     }
 }
@@ -79,7 +112,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         createTile: (tile) => dispatch({type: 'CREATE_TILE', payload: tile}),
-        landOnTile: (key) => dispatch({type:'LAND_ON_TILE', payload: {key}})
+        landOnTile: (key) => dispatch({type:'LAND_ON_TILE', payload: {key}})//dispatch another action to reveal tiles
     }
 }
 

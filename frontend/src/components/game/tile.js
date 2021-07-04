@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 function Tile(props) {
     return (
         <p>
-            {props.occupied ? props.playerIcon : props.eventIcon ? props.eventIcon : props.defaultIcon}
+            {props.hidden ? '' : props.occupied ? props.playerIcon : props.eventIcon ? props.eventIcon : props.defaultIcon}
         </p>
     )
 }
