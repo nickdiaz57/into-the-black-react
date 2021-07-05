@@ -1,4 +1,4 @@
-var Event = {
+export var Event = {
     OUTPOST: {
         icon: "O",
         scenes: {
