@@ -35,10 +35,11 @@ class Map extends Component {
         for(let y = 0; y < sideLength; y++) {
             for(let x = 0; x < sideLength; x++) {
                 //change hidden attribute back to true once tile reveal method works
-                tileArr.push({key: counter, defaultIcon: '.', playerIcon: '@', event: '', occupied: false, hidden: false, xcoord: x, ycoord: y})
+                tileArr.push({key: counter, defaultIcon: '.', playerIcon: '@', event: '', occupied: false, hidden: true, xcoord: x, ycoord: y})
                 counter++
             }
         }
+        tileArr[899].event = Event['BEACON']
         this.persistEvents(tileArr)
         this.props.addEvents(tileArr)
     }
@@ -69,35 +70,57 @@ class Map extends Component {
         return tile
     }
 
+    seeTiles = (pos=this.props.position) => {
+        //tie this to the landOnTile action - thunk?
+        //figure out how to see tiles around player and beacon immediately when map loads
+        for (let y = pos[1] - 2; y <= pos[1] + 2; y++) {
+            for (let x = pos[0] - 2; x <= pos[0] + 2; x++) {
+                if(this.isValid(y) && this.isValid(x)) {this.props.revealTile(this.getTile([x,y]).key)}
+            }
+        }
+        //revealed tiles are also on a one move delay
+    }
+
+    isValid = (num) => (num >= 0 && num <= 29)
+
     handleMove = (e) => {//pass up previous tile to return it to unoccupied status
         //currently one move delay on correct move
         //still on one move delay with both local state and redux
         //position changes correctly but rendering the occupied tile is one move behind
         //check the order of when the tiles render and when the dispatches complete
         //look up how to prevent scrolling when hitting arrow keys
+
+        // this.props.landOnTile(this.getTile().key)
+        //this erases the trail but now the player cant see where they are
+        //probably because of the one move delay problem
+
         switch (e.key) {
             case 'ArrowUp':
                 if (this.props.position[1] > 0){
                     this.props.moveUp(1)
                     this.props.landOnTile(this.getTile().key)
+                    this.seeTiles()
                 }
                 break;
             case 'ArrowDown':
                 if (this.props.position[1] < 29){
                     this.props.moveDown(1)
                     this.props.landOnTile(this.getTile().key)
+                    this.seeTiles()
                 }
                 break;
             case 'ArrowRight':
                 if (this.props.position[0] < 29){
                     this.props.moveRight(1)
                     this.props.landOnTile(this.getTile().key)
+                    this.seeTiles()
                 }
                 break;
             case 'ArrowLeft':
                 if (this.props.position[0] > 0){
                     this.props.moveLeft(1)
                     this.props.landOnTile(this.getTile().key)
+                    this.seeTiles()
                 }
                 break;
             default:
@@ -144,6 +167,7 @@ const mapDispatchToProps = (dispatch) => {
         createTile: (tile) => dispatch({type: 'CREATE_TILE', payload: tile}),
         addEvents: (tiles) => dispatch({type: 'ADD_EVENTS', payload: tiles}),
         landOnTile: (key) => dispatch({type:'LAND_ON_TILE', payload: key}),//dispatch another action to reveal tiles
+        revealTile: (key) => dispatch({type: 'REVEAL_TILE', payload: key}),
         clearMap: () => dispatch({type: 'CLEAR_MAP'}),
         moveRight: (dist) => dispatch({type: 'MOVE_RIGHT', payload: dist}),
         moveLeft: (dist) => dispatch({type: 'MOVE_LEFT', payload: dist}),

@@ -19,6 +19,10 @@ export default function GameReducer(state = {user: {}, position: [0,0], tiles: [
             let newTiles = state.tiles
             newTiles.splice(action.payload, 1, {...newTiles[action.payload], occupied: !newTiles[action.payload].occupied})
             return {...state, tiles: newTiles}
+        case 'REVEAL_TILE'://FIX THIS
+            let newTiles1 = state.tiles
+            newTiles1.splice(action.payload, 1, {...newTiles1[action.payload], hidden: false})
+            return {...state, tiles: newTiles1}
         case 'CLEAR_MAP':
             return {...state, position: [0,0], tiles: []}
         default:
