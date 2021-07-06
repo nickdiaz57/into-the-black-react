@@ -21,12 +21,8 @@ const seed = {//add back events at later date
 
 class Map extends Component {
 
-    //create tiles, distribute events, add player to map, all when component mounts
-    //map can keep track of the active tile with local state
-
     componentDidMount = () => {
         this.generateTiles()
-        // this.persistEvents()
         this.props.landOnTile(0)
         window.addEventListener('keydown', this.handleMove)//consider moving event listener up to game container
     }
@@ -38,25 +34,20 @@ class Map extends Component {
         let counter = 0
         for(let y = 0; y < sideLength; y++) {
             for(let x = 0; x < sideLength; x++) {
-                //decision on if a tile has an event or not and which icon it has should be made here
                 //change hidden attribute back to true once tile reveal method works
                 tileArr.push({key: counter, defaultIcon: '.', playerIcon: '@', event: '', occupied: false, hidden: false, xcoord: x, ycoord: y})
-                // this.setState({tiles: [...this.state.tiles, {key: counter, defaultIcon: '.', playerIcon: '@', event: '', occupied: false, hidden: false, xcoord: x, ycoord: y}]})
-                // this.props.createTile({key: counter, defaultIcon: '.', playerIcon: '@', event: '', occupied: false, hidden: false, xcoord: x, ycoord: y})
                 counter++
             }
         }
         this.persistEvents(tileArr)
         this.props.addEvents(tileArr)
-        // this.props.createTiles(this.state.tiles)
     }
 
     getTile = (coords=this.props.position, tiles=this.props.tiles) => {
         return tiles.find((t) => equals(coords, [t.xcoord, t.ycoord]))
     }
-    //pull down array of tiles again after generating, populate with events, resend back to redux, then render the new array
-    getRandomTile = (tiles) => {
 
+    getRandomTile = (tiles) => {
         let target
         do {
             target = this.getTile([(Math.floor(Math.random() * 27)) + 1, (Math.floor(Math.random() * 27)) + 1], tiles)
@@ -65,16 +56,11 @@ class Map extends Component {
     }
 
     persistEvents(tiles) {
-        // this.tiles[29][29].event = Event.BEACON
-        // const revealed = [this.tiles[29][29], this.tiles[28][29], this.tiles[27][29], this.tiles[29][28], this.tiles[29][27], this.tiles[28][28], this.tiles[27][27], this.tiles[27][28], this.tiles[28][27]]
-        // revealed.forEach(t => t.revealTile())
-
         for(let e in seed) {
             for(let i = 0; i < seed[e]; i++) {
                 this.assignEvent(Event[e], tiles)
             }
         }
-        // console.log(this.props.tiles)
     }
 
     assignEvent(event, tiles) {
@@ -92,31 +78,26 @@ class Map extends Component {
         switch (e.key) {
             case 'ArrowUp':
                 if (this.props.position[1] > 0){
-                    // this.setState({position: [this.state.position[0], this.state.position[1] - 1]})
                     this.props.moveUp(1)
                     this.props.landOnTile(this.getTile().key)
                 }
                 break;
             case 'ArrowDown':
                 if (this.props.position[1] < 29){
-                    // this.setState({position: [this.state.position[0], this.state.position[1] + 1]})
                     this.props.moveDown(1)
                     this.props.landOnTile(this.getTile().key)
                 }
                 break;
             case 'ArrowRight':
                 if (this.props.position[0] < 29){
-                    // this.setState({position: [this.state.position[0] + 1, this.state.position[1]]})
                     this.props.moveRight(1)
                     this.props.landOnTile(this.getTile().key)
                 }
                 break;
             case 'ArrowLeft':
                 if (this.props.position[0] > 0){
-                    // this.setState({position: [this.state.position[0] - 1, this.state.position[1]]})
                     this.props.moveLeft(1)
                     this.props.landOnTile(this.getTile().key)
-
                 }
                 break;
             default:
@@ -127,8 +108,6 @@ class Map extends Component {
     componentWillUnmount = () => {
         this.props.clearMap()
         window.removeEventListener('keydown', this.handleMove)
-        // this.setState({position: [0,0]})
-        //clear out tiles from state, reset position to 0,0
     }
 
     render() {
