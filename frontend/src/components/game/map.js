@@ -100,6 +100,7 @@ class Map extends Component {
                     this.props.moveUp(1)
                     this.props.landOnTile(this.getTile().key)
                     this.seeTiles()
+                    console.log(this.props.position)
                 }
                 break;
             case 'ArrowDown':
@@ -107,6 +108,7 @@ class Map extends Component {
                     this.props.moveDown(1)
                     this.props.landOnTile(this.getTile().key)
                     this.seeTiles()
+                    console.log(this.props.position)
                 }
                 break;
             case 'ArrowRight':
@@ -114,6 +116,7 @@ class Map extends Component {
                     this.props.moveRight(1)
                     this.props.landOnTile(this.getTile().key)
                     this.seeTiles()
+                    console.log(this.props.position)
                 }
                 break;
             case 'ArrowLeft':
@@ -121,6 +124,7 @@ class Map extends Component {
                     this.props.moveLeft(1)
                     this.props.landOnTile(this.getTile().key)
                     this.seeTiles()
+                    console.log(this.props.position)
                 }
                 break;
             default:
@@ -136,7 +140,7 @@ class Map extends Component {
     render() {
         return(
             <>
-            <button onClick={() => console.log(Event)}>Testing Button</button>
+            <button onClick={() => console.log(this.props.user)}>Testing Button</button>
             <div className='map'>
                 {this.props.tiles.map(t => {
                     return <Tile
@@ -157,6 +161,7 @@ class Map extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        user: state.user, //remove
         position: state.position,
         tiles: state.tiles
     }

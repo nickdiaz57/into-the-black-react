@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import NameForm from './nameForm'
+import NameForm from './nameForm';
+import { Redirect } from 'react-router-dom'
 
 class WelcomeScreen extends Component {
     //set active user, present a short intro message, then send to game container to play game
+
+    state = {
+        toGame: false
+    }
     
     headers = {"Accepts": "application/json", "Content-Type": "application/json"}
 
@@ -18,14 +23,23 @@ class WelcomeScreen extends Component {
         .then(json => this.props.setUser(json))
     }
 
+    loginUser = (userName) => {
+        this.getUser(userName)
+            .then(() => this.setState({toGame: true}))
+    }
+
 
     render() {
-        return(
-            <>
+        if (this.state.toGame === true) {
+            return <Redirect to='/play' />
+        } else {
+            return(
+                <>
                 <h3>Welcome, Commander.</h3>
-                <NameForm getUser={this.getUser}/>
-            </>
-        )
+                <NameForm loginUser={this.loginUser}/>
+                </>
+            )
+        }
     }
 }
 
