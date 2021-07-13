@@ -9,8 +9,10 @@ export default function GameReducer(state = {user: {}, player: {}, position: [0,
             return {...state, position: [state.position[0], state.position[1] - action.payload]}
         case 'MOVE_DOWN':
             return {...state, position: [state.position[0], state.position[1] + action.payload]}
-        case 'SET_USER': 
-            return {...state, user: action.payload}//separate out
+        case 'SET_USER': //separate out
+            return {...state, user: action.payload}
+        case 'CLEAR_USER': //separate out
+            return {...state, user: {}}
         case 'CREATE_TILE':
             return {...state, tiles: [...state.tiles, action.payload]}
         case 'ADD_EVENTS':

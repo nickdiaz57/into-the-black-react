@@ -26,7 +26,7 @@ class WelcomeScreen extends Component {
     loginUser = (userName) => {
         this.getUser(userName)
             .then(() => this.setState({toGame: true}))
-    }
+    }//display error message if login does not go through
 
 
     render() {

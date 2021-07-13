@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import Map from './map';
 
 const equals = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
 
 class GameContainer extends Component {
+
+    state = {
+        gameOver: false
+    }
 
     //check win condition
     //check loss condition
@@ -23,12 +28,16 @@ class GameContainer extends Component {
 
     //inventory panel, text boxes and buttons, message feed
     render() {
-        return(
-            <div>
-                <h1>Game Container</h1>
-                <Map/>
-            </div>
-        )
+        if (this.state.gameOver === true) {
+            return <Redirect to='/end' />
+        } else {
+            return(
+                <div>
+                    <h1>Game Container</h1>
+                    <Map endGame={() => this.setState({gameOver: true})}/>
+                </div>
+            )
+        }
     }
 }
 

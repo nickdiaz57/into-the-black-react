@@ -140,7 +140,7 @@ class Map extends Component {
     render() {
         return(
             <>
-            <button onClick={() => console.log(this.props.user)}>Testing Button</button>
+            <button onClick={() => this.props.endGame()}>Testing Button</button>
             <div className='map'>
                 {this.props.tiles.map(t => {
                     return <Tile
