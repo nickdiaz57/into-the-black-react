@@ -1,20 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-//needs to render the proper icon depending on if event or player is present on tile
-//make a 'visited' flag so events wont run again if tile is revisited
+import EventModal from './eventModal'
 
-// handleEvent() {
-//     // when user hits this component and component has event, show modal
-// }
+const equals = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
 
 function Tile(props) {
+    const [modalShow, setModalShow] = useState(false);
+    const [visited, setVisited] = useState(false);
+
+    const handleShow = () => setModalShow(true)
+
+    const handleClose = () => {
+        setVisited(true)
+        setModalShow(false)
+    }
+
+    useEffect(() => {
+        if (equals(props.position, [props.xcoord, props.ycoord]) && props.event && !visited) {
+            handleShow()
+        }
+    })
+
     return (
-        <p>
-            {props.hidden ? '' : props.occupied ? props.playerIcon : props.event ? props.event.icon : props.defaultIcon}
-        </p>
-    )
+        <>
+            <p>
+                {props.hidden ? '' : props.occupied ? props.playerIcon : props.event ? props.event.icon : props.defaultIcon}
+            </p>
+
+            {modalShow ? 
+                <EventModal event={props.event} show={modalShow} onHide={handleClose}/>
+                : null
+            }
+            </>
+            )
 }
 
-//map dispatch
-export default connect()(Tile)
-//default icon, event icon, player icon
+const mapStateToProps = (state) => {
+    return {
+        position: state.position
+    }
+}
+
+export default connect(mapStateToProps)(Tile)

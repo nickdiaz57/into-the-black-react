@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Tile from './tile';
 import {Event} from './event'
+import { Button } from 'react-bootstrap';
 
 const equals = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
 const seed = {//add back events at later date
@@ -35,7 +36,7 @@ class Map extends Component {
         for(let y = 0; y < sideLength; y++) {
             for(let x = 0; x < sideLength; x++) {
                 //change hidden attribute back to true once tile reveal method works
-                tileArr.push({key: counter, defaultIcon: '.', playerIcon: '@', event: '', occupied: false, hidden: true, xcoord: x, ycoord: y})
+                tileArr.push({key: counter, defaultIcon: '.', playerIcon: '@', event: '', occupied: false, hidden: true, xcoord: x, ycoord: y, visited: false})
                 counter++
             }
         }
@@ -132,6 +133,10 @@ class Map extends Component {
         }
     }
 
+    displayModal = () => {
+        console.log('test')
+    }
+
     componentWillUnmount = () => {
         this.props.clearMap()
         window.removeEventListener('keydown', this.handleMove)
@@ -140,7 +145,8 @@ class Map extends Component {
     render() {
         return(
             <>
-            <button onClick={() => this.props.endGame()}>Testing Button</button>
+            <button onClick={() => this.props.endGame()}>End Game Testing Button</button>
+            <Button variant='primary' onClick={this.displayModal}>Testing Button</Button>
             <div className='map'>
                 {this.props.tiles.map(t => {
                     return <Tile
@@ -151,7 +157,8 @@ class Map extends Component {
                         occupied={t.occupied}
                         hidden={t.hidden}
                         xcoord={t.xcoord} 
-                        ycoord={t.ycoord}/>
+                        ycoord={t.ycoord}
+                        visited={t.visited}/>
                 })}
             </div>
             </>
