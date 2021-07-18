@@ -11,7 +11,7 @@ function Tile(props) {
     const handleShow = () => setModalShow(true)
 
     const handleClose = () => {
-        setVisited(true)
+        setVisited(true)//maybe use this to keep rerendering new modals as event progresses, only set this true when event is over
         setModalShow(false)
     }
 
@@ -21,6 +21,18 @@ function Tile(props) {
         }
     })
 
+    const triggerEvent = (event) => {
+        return <EventModal text={event.text} show={modalShow} onHide={handleClose} />
+    }
+
+    // const handleScene = (scene) => {
+    //     return <EventModal text={scene.text} buttons={scene.buttons}/>
+    // }
+
+    // const handleButtons = (button) => {
+    //     console.log(button)
+    // }
+
     return (
         <>
             <p>
@@ -28,16 +40,17 @@ function Tile(props) {
             </p>
 
             {modalShow ? 
-                <EventModal event={props.event} show={modalShow} onHide={handleClose}/>
+                // <EventModal event={props.event} show={modalShow} onHide={handleClose}/>
+                triggerEvent(props.event.scenes['start'])
                 : null
             }
-            </>
-            )
+        </>
+    )
 }
 
 const mapStateToProps = (state) => {
     return {
-        position: state.position
+        position: state.game.position
     }
 }
 

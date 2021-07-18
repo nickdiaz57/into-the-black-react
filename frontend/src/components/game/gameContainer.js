@@ -19,6 +19,7 @@ class GameContainer extends Component {
             console.log('win')
         } else if(this.props.player.health <=0 || this.props.player.fuel <= 0) {
             //lose
+            console.log('lose')
         }
     }//run this after a move or end of an event
 
@@ -34,7 +35,7 @@ class GameContainer extends Component {
             return(
                 <div>
                     <h1>Game Container</h1>
-                    <Map endGame={() => this.setState({gameOver: true})}/>
+                    <Map checkGameOver={this.checkGameOver} endGame={() => this.setState({gameOver: true})}/>
                 </div>
             )
         }
@@ -43,8 +44,8 @@ class GameContainer extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        position: state.position,
-        player: state.player
+        position: state.game.position,
+        player: state.game.player
     }
 }
 

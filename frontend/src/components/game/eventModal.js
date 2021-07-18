@@ -5,11 +5,11 @@ function EventModal(props) {
 
     return (
         <Modal {...props} centered size='lg' backdrop='static'>
-            <Modal.Header closeButton />
+            <Modal.Header closeButton /> {/*remove*/}
             <Modal.Body>
-                {/* <p>{props.event}</p> */}
-                Body
+                <p>{props.text}</p>
             </Modal.Body>
+            {/* <Modal.Footer closeButton /> */}
         </Modal>
     )
 }
