@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import Tile from './tile';
 import InventoryPanel from './inventoryPanel'
 import { Event } from './event'
+import { createMap, clearMap } from '../../redux/actions/mapActions'
+import { changeResource, moveUp, moveDown, moveLeft, moveRight } from '../../redux/actions/playerActions'
 
 const equals = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
 const seed = {//add back events at later date
@@ -24,7 +26,8 @@ class Map extends Component {
 
     componentDidMount = () => {
         this.generateTiles()
-        this.props.landOnTile(0)
+        // this.seeTiles()
+        //this.props.landOnTile(0) // <-- not sure this is the problem (right now)
         window.addEventListener('keydown', this.handleMove)//consider moving event listener up to game container
     }//how to make movement stop when event modal is open?
 
@@ -37,9 +40,11 @@ class Map extends Component {
                 counter++
             }
         }
+        tileArr[0].occupied = true
+        tileArr[0].hidden = false
         tileArr[899].event = Event['BEACON']
-        this.persistEvents(tileArr)
-        this.props.addEvents(tileArr)
+        this.addEvents(tileArr)
+        this.props.createMap(tileArr)
     }
 
     getTile = (coords=this.props.position, tiles=this.props.tiles) => {
@@ -54,7 +59,7 @@ class Map extends Component {
         return target
     }
 
-    persistEvents(tiles) {
+    addEvents(tiles) {
         for(let e in seed) {
             for(let i = 0; i < seed[e]; i++) {
                 this.assignEvent(Event[e], tiles)
@@ -91,47 +96,60 @@ class Map extends Component {
         // this.props.landOnTile(this.getTile().key)
         //this erases the trail but now the player cant see where they are
         //probably because of the one move delay problem
-        this.props.changeFuel(-2)
+        this.props.changeResource('fuel', -2)
 
         switch (e.key) {
             case 'ArrowUp':
                 if (this.props.position[1] > 0){
+                    // this.props.landOnTile(this.getTile().key)
                     this.props.moveUp(1)
-                    this.props.landOnTile(this.getTile().key)
-                    this.seeTiles()
-                    console.log(this.props.position)
                 }
                 break;
             case 'ArrowDown':
                 if (this.props.position[1] < 29){
+                    // this.props.landOnTile(this.getTile().key)
                     this.props.moveDown(1)
-                    this.props.landOnTile(this.getTile().key)
-                    this.seeTiles()
-                    console.log(this.props.position)
                 }
                 break;
             case 'ArrowRight':
                 if (this.props.position[0] < 29){
+                    // this.props.landOnTile(this.getTile().key)
                     this.props.moveRight(1)
-                    this.props.landOnTile(this.getTile().key)
-                    this.seeTiles()
-                    console.log(this.props.position)
                 }
                 break;
             case 'ArrowLeft':
                 if (this.props.position[0] > 0){
+                    // this.props.landOnTile(this.getTile().key)
                     this.props.moveLeft(1)
-                    this.props.landOnTile(this.getTile().key)
-                    this.seeTiles()
-                    console.log(this.props.position)
                 }
                 break;
             default:
                 return
         }
-
+        console.log('position', this.props.position, 'key', this.getTile().key)
+        this.props.landOnTile(this.getTile().key)
+        this.seeTiles()
+        //pull everything back from redux
+        //save it to an array
+        //send that to the render method
+        // this.renderTiles(this.props.tiles)
         this.props.checkGameOver()
     }
+
+    // renderTiles = (array=this.props.tiles) => {
+    //     return array.map(t => {
+    //         return <Tile
+    //             key={t.key}
+    //             defaultIcon={t.defaultIcon} 
+    //             playerIcon={t.playerIcon}
+    //             event={t.event}
+    //             occupied={t.occupied}
+    //             hidden={t.hidden}
+    //             xcoord={t.xcoord} 
+    //             ycoord={t.ycoord}
+    //             visited={t.visited}/>
+    //     })
+    // }
 
     componentWillUnmount = () => {
         this.props.clearMap()
@@ -143,6 +161,7 @@ class Map extends Component {
             <>
             <button onClick={() => this.props.endGame()}>End Game Testing Button</button>
             <InventoryPanel />
+            {/* {console.log(this.props.tiles)} */}
             <div className='map'>
                 {this.props.tiles.map(t => {
                     return <Tile
@@ -156,6 +175,7 @@ class Map extends Component {
                         ycoord={t.ycoord}
                         visited={t.visited}/>
                 })}
+                {/* {this.renderTiles()} */}
             </div>
             </>
         )
@@ -171,16 +191,15 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        createTile: (tile) => dispatch({type: 'CREATE_TILE', payload: tile}),
-        addEvents: (tiles) => dispatch({type: 'ADD_EVENTS', payload: tiles}),
+        createMap : (tiles) => dispatch(createMap(tiles)),
         landOnTile: (key) => dispatch({type:'LAND_ON_TILE', payload: key}),//dispatch another action to reveal tiles
         revealTile: (key) => dispatch({type: 'REVEAL_TILE', payload: key}),
-        clearMap: () => dispatch({type: 'CLEAR_MAP'}),
-        moveRight: (dist) => dispatch({type: 'MOVE_RIGHT', payload: dist}),
-        moveLeft: (dist) => dispatch({type: 'MOVE_LEFT', payload: dist}),
-        moveUp: (dist) => dispatch({type: 'MOVE_UP', payload: dist}),
-        moveDown: (dist) => dispatch({type: 'MOVE_DOWN', payload: dist}),
-        changeFuel: (amt) => dispatch({type: 'CHANGE_FUEL', payload: amt})
+        clearMap: () => dispatch(clearMap()),
+        moveRight: (dist) => dispatch(moveRight(dist)),
+        moveLeft: (dist) => dispatch(moveLeft(dist)),
+        moveUp: (dist) => dispatch(moveUp(dist)),
+        moveDown: (dist) => dispatch(moveDown(dist)),
+        changeResource: (resource, amount) => dispatch(changeResource(resource,amount))
     }
 }
 

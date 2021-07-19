@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { clearUser } from '../../redux/actions/userActions'
 
 class EndScreen extends Component {
 
@@ -45,7 +46,7 @@ class EndScreen extends Component {
                     <button onClick={() => this.setState({toWelcome: true})}>Exit</button>
                 </div>
             )
-        }
+        }//make sure the fetches arent happening twice, maybe?
     }
 }
 
@@ -57,7 +58,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        clearUser: () => dispatch({type: 'CLEAR_USER'})
+        clearUser: () => dispatch(clearUser())
     }
 }
 

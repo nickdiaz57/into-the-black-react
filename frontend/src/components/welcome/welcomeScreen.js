@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import NameForm from './nameForm';
 import { Redirect } from 'react-router-dom'
+import { setUser } from '../../redux/actions/userActions'
 
 class WelcomeScreen extends Component {
     //set active user, present a short intro message, then send to game container to play game
@@ -45,7 +46,7 @@ class WelcomeScreen extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setUser: (user) => dispatch({type: 'SET_USER', payload: user})//action creator?
+        setUser: (user) => dispatch(setUser(user))
     }
 }
 

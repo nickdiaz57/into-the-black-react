@@ -1,8 +1,8 @@
 export default function UserReducer(state = {}, action) {
     switch (action.type){
-        case 'SET_USER': //separate out
+        case 'SET_USER':
             return action.payload
-        case 'CLEAR_USER': //separate out
+        case 'CLEAR_USER':
             return {}
         default:
             return state

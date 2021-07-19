@@ -16,6 +16,7 @@ function Tile(props) {
     }
 
     useEffect(() => {
+       // debugger;
         if (equals(props.position, [props.xcoord, props.ycoord]) && props.event && !visited) {
             handleShow()
         }
@@ -36,6 +37,7 @@ function Tile(props) {
     return (
         <>
             <p>
+                {/* {console.log(props.hidden ? '' : props.occupied ? props.playerIcon : props.event ? props.event.icon : props.defaultIcon)} */}
                 {props.hidden ? '' : props.occupied ? props.playerIcon : props.event ? props.event.icon : props.defaultIcon}
             </p>
 
