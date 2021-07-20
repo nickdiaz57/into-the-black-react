@@ -22,9 +22,9 @@ function Tile(props) {
         }
     })
 
-    const triggerEvent = (event) => {
-        return <EventModal text={event.text} show={modalShow} onHide={handleClose} />
-    }
+    // const triggerEvent = (event) => {
+    //     return <EventModal text={event.text} show={modalShow} onHide={handleClose} />
+    // }
 
     // const handleScene = (scene) => {
     //     return <EventModal text={scene.text} buttons={scene.buttons}/>
@@ -42,8 +42,8 @@ function Tile(props) {
             </p>
 
             {modalShow ? 
-                // <EventModal event={props.event} show={modalShow} onHide={handleClose}/>
-                triggerEvent(props.event.scenes['start'])
+                <EventModal event={props.event} show={modalShow} onHide={handleClose}/>
+                // triggerEvent(props.event.scenes['start'])
                 : null
             }
         </>

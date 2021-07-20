@@ -1,26 +1,45 @@
-import React from 'react'
-import { Modal } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Modal, Button } from 'react-bootstrap'
 
 function EventModal(props) {
-    // props would hold event object
 
-    // event handler for button one that handles selected next key
-    // based on next value, go to this value etc.
-    // useState for all valuse (text, buttons, anything additional could be passed to redux) setModalText
+    const [activeScene, setActiveScene] = useState(props.event.scenes['start'])
+
+    const setOnClick = (nextScene) => {
+        return (() => setActiveScene(nextScene))
+    }
+
+    const handleRandomChance = (options) => {
+        let ref = Math.floor(Math.random() *10) + 1
+        let target = Object.keys(options).find(k => ref <= k)
+        if (options[target] === 'end') {
+            return props.onHide
+        } else {
+            return setOnClick(props.event.scenes[options[target]])
+        }
+    }
+
+    const createButtons = (buttons) => {
+        let buttonArr = []
+        for (const b in buttons) {
+            if (buttons[b].next === 'end') {
+                buttonArr.push(<Button variant='secondary' onClick={props.onHide}>{buttons[b].value}</Button>)
+            } else if (typeof buttons[b].next === 'object') {
+                buttonArr.push(<Button variant='primary' onClick={handleRandomChance(buttons[b].next)}>{buttons[b].value}</Button>)
+            } else {
+                buttonArr.push(<Button variant='primary' onClick={setOnClick(props.event.scenes[buttons[b].next])}>{buttons[b].value}</Button>)
+            }//determine onclicks in their own function, so they can do something else besides just setting active scene
+        }
+        return buttonArr
+    }
 
     return (
         <Modal {...props} centered size='lg' backdrop='static'>
-            <Modal.Header closeButton /> {/*remove*/}
             <Modal.Body>
-                <p>{/*modalText*/}{props.text}</p>
+                <p>{activeScene.text}</p>
             </Modal.Body>
-            {/* <Modal.Footer closeButton /> */}
             <Modal.Footer>
-                {/* <Button variant="secondary" onClick="handleNextButton(props.next)">{props.buttonOne}</Button>
-                { secondButton ? 
-                    <Button variant="primary">{props.buttonTwo}</Button>
-                    : null
-                } */}
+                {createButtons(activeScene.buttons)}
             </Modal.Footer>
         </Modal>
     )

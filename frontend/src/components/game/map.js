@@ -126,7 +126,6 @@ class Map extends Component {
             default:
                 return
         }
-        console.log('position', this.props.position, 'key', this.getTile().key)
         this.props.landOnTile(this.getTile().key)
         this.seeTiles()
         //pull everything back from redux
