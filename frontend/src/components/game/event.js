@@ -13,13 +13,13 @@ export var Event = {
             'fuel': {
                 text: 'The transaction clears.\nA small droid approaches your ship with additional fuel.',
                 buttons: {
-                    'finish': {value: 'Leave station.', next: 'end', result: {fuel: 50}}//lose scrap, gain fuel
+                    'finish': {value: 'Leave station.', next: 'end', result: {fuel: 50, scrap: -20}}//lose scrap, gain fuel
                 }
             },
             'repair': {
                 text: 'The transaction clears.\nA group of repair drones encircles your ship and patches the hull.',
                 buttons: {
-                    'finish': {value: 'Leave station.', next: 'end', result: {health: 100}}//lose scrap, gain health
+                    'finish': {value: 'Leave station.', next: 'end', result: {health: 100, scrap: -20}}//lose scrap, gain health
                 }
             }
         }
@@ -123,7 +123,7 @@ export var Event = {
             'thanks': {
                 text: "They seem grateful. They send over some scrap as thanks.",
                 buttons: {//gain scrap, lose fuel
-                    'finish': {value: 'Leave.', next: 'end', result: {scrap: 50}}
+                    'finish': {value: 'Leave.', next: 'end', result: {fuel: -30, scrap: 50}}
                 }
             },
             'ambush': {
@@ -142,7 +142,7 @@ export var Event = {
             'surrender': {
                 text: "You surrender a loaded cargo capsule. The cruiser scoops it up and speeds off.\nYour hold is empty, but your ship is unharmed.",
                 buttons: {
-                    'finish': {value: "Leave.", next: 'end'}//lose fuel, scrap
+                    'finish': {value: "Leave.", next: 'end', result: {fuel: -50, scrap: -100}}//lose fuel, scrap
                 }
             },
             'damage': {

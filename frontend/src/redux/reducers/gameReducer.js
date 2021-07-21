@@ -1,4 +1,4 @@
-export default function GameReducer(state = {player: {fuel: 100, scrap: 50, health: 100}, position: [0,0], tiles: []}, action) {
+export default function GameReducer(state = {player: {fuel: 100, scrap: 20, health: 100}, position: [0,0], tiles: []}, action) {
 
     switch (action.type){
         case 'MOVE_RIGHT':
@@ -10,7 +10,7 @@ export default function GameReducer(state = {player: {fuel: 100, scrap: 50, heal
         case 'MOVE_DOWN':
             return {...state, position: [state.position[0], state.position[1] + action.payload]}
 
-        case 'CHANGE_RESOURCE'://extend to handle all resources
+        case 'CHANGE_RESOURCE':
             let newResource = state.player[action.payload.resource] + action.payload.amount
             return {...state, player: {...state.player, [action.payload.resource]: newResource}}
 
@@ -22,7 +22,7 @@ export default function GameReducer(state = {player: {fuel: 100, scrap: 50, heal
             newTiles.splice(action.payload, 1, {...newTiles[action.payload], occupied: !newTiles[action.payload].occupied})
             return {...state, tiles: newTiles}
 
-        case 'REVEAL_TILE'://FIX THIS
+        case 'REVEAL_TILE':
             let newTiles1 = state.tiles
             newTiles1.splice(action.payload, 1, {...newTiles1[action.payload], hidden: false})
             return {...state, tiles: newTiles1}
