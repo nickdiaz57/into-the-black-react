@@ -1,4 +1,4 @@
-export default function GameReducer(state = {player: {fuel: 100, scrap: 20, health: 100}, position: [0,0], tiles: []}, action) {
+export default function GameReducer(state = {player: {fuel: 100, scrap: 20, health: 100}, position: [0,0], tiles: [], won: false}, action) {
 
     switch (action.type){
         case 'MOVE_RIGHT':
@@ -26,9 +26,15 @@ export default function GameReducer(state = {player: {fuel: 100, scrap: 20, heal
             let newTiles1 = state.tiles
             newTiles1.splice(action.payload, 1, {...newTiles1[action.payload], hidden: false})
             return {...state, tiles: newTiles1}
+
+        case 'WIN_GAME':
+            return {...state, won: true}
+
+        case 'RESET_WON':
+            return {...state, won: false}
             
         case 'CLEAR_MAP':
-            return {...state, position: [0,0], tiles: []}
+            return {...state, player: {fuel: 100, scrap: 20, health: 100}, position: [0,0], tiles: []}
         default:
             return state
     }

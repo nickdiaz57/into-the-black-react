@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { clearUser } from '../../redux/actions/userActions'
+import { resetWon } from '../../redux/actions/mapActions';
+import { Button } from 'react-bootstrap'
 
 class EndScreen extends Component {
 
@@ -13,27 +15,25 @@ class EndScreen extends Component {
     headers = {"Accepts": "application/json", "Content-Type": "application/json"}
 
     submitGame = () => {
-        //fetch request to send game to backend
         const url = 'http://localhost:3001/games'
-        console.log(this.props.user)
-        let record = {user: {name: this.props.user.name}, game: {completed: true, won: false}}
-        console.log(record)
+        let record = {user: {name: this.props.user.name}, game: {completed: true, won: this.props.won}}
 
         return fetch(url, {
             method: "POST",
             headers: this.headers,
             body: JSON.stringify(record)
         }).then(r => r.json())
-        .then(console.log)
+        .then(this.props.resetWon())
     }
 
+    getWins = (user) => user.games.filter(x => x.completed === true && x.won === true).length
+
+    getLosses = (user) => user.games.filter(x => x.completed === true && x.won === false).length
+
     render() {
-        //these break sporadically, sometimes they throw a 500 error for server is busy/locked, other times they work fine
-        //the record is still submitted to the database and it persists, sometimes it will send the record back up to frontend
-        //sometimes it will send the 500 error instead
         if (this.state.toWelcome === true) {
             this.submitGame()
-            this.props.clearUser()//error message received here but state updates correctly, look into this
+            this.props.clearUser()
             return <Redirect to='/' />
         } else if (this.state.newGame === true) {
             this.submitGame()
@@ -41,24 +41,39 @@ class EndScreen extends Component {
         } else {
             return(
                 <div>
-                    <h1>End Screen</h1>
-                    <button onClick={() => this.setState({newGame: true})}>New Game</button>
-                    <button onClick={() => this.setState({toWelcome: true})}>Exit</button>
+                    <h1>Game Over</h1>
+                    {this.props.won ? 
+                        <>
+                        <h3>Congratulations, Commander {this.props.user.name}.</h3>
+                        <p>You have successfully navigated across the system and reached the beacon.</p>
+                        </>
+                        :
+                        <>
+                        <h3>Defeat</h3>
+                        <p>Your ship is incapacitated, and your journey has ended.</p>
+                        </>
+                    }
+                    <p><b>Wins: </b>{this.getWins(this.props.user)}</p>
+                    <p><b>Losses: </b>{this.getLosses(this.props.user)}</p>
+                    <Button variant='primary' onClick={() => this.setState({newGame: true})}>Play Again</Button>
+                    <Button variant='secondary' onClick={() => this.setState({toWelcome: true})}>Exit</Button>
                 </div>
             )
-        }//make sure the fetches arent happening twice, maybe?
+        }
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        user: state.user
+        user: state.user,
+        won: state.game.won
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        clearUser: () => dispatch(clearUser())
+        clearUser: () => dispatch(clearUser()),
+        resetWon: () => dispatch(resetWon())
     }
 }
 

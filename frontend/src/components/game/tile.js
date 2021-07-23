@@ -11,39 +11,24 @@ function Tile(props) {
     const handleShow = () => setModalShow(true)
 
     const handleClose = () => {
-        setVisited(true)//maybe use this to keep rerendering new modals as event progresses, only set this true when event is over
+        setVisited(true)
         setModalShow(false)
     }
 
     useEffect(() => {
-       // debugger;
         if (equals(props.position, [props.xcoord, props.ycoord]) && props.event && !visited) {
             handleShow()
         }
     })
 
-    // const triggerEvent = (event) => {
-    //     return <EventModal text={event.text} show={modalShow} onHide={handleClose} />
-    // }
-
-    // const handleScene = (scene) => {
-    //     return <EventModal text={scene.text} buttons={scene.buttons}/>
-    // }
-
-    // const handleButtons = (button) => {
-    //     console.log(button)
-    // }
-
     return (
         <>
             <p>
-                {/* {console.log(props.hidden ? '' : props.occupied ? props.playerIcon : props.event ? props.event.icon : props.defaultIcon)} */}
                 {props.hidden ? '' : props.occupied ? props.playerIcon : props.event ? props.event.icon : props.defaultIcon}
             </p>
 
             {modalShow ? 
                 <EventModal event={props.event} show={modalShow} onHide={handleClose}/>
-                // triggerEvent(props.event.scenes['start'])
                 : null
             }
         </>

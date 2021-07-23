@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Tile from './tile';
 import InventoryPanel from './inventoryPanel'
 import { Event } from './event'
-import { createMap, clearMap } from '../../redux/actions/mapActions'
+import { createMap, clearMap, landOnTile, revealTile } from '../../redux/actions/mapActions'
 import { changeResource, moveUp, moveDown, moveLeft, moveRight } from '../../redux/actions/playerActions'
 
 const equals = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
@@ -26,10 +26,8 @@ class Map extends Component {
 
     componentDidMount = () => {
         this.generateTiles()
-        // this.seeTiles()
-        //this.props.landOnTile(0) // <-- not sure this is the problem (right now)
-        window.addEventListener('keydown', this.handleMove)//consider moving event listener up to game container
-    }//how to make movement stop when event modal is open?
+        window.addEventListener('keydown', this.handleMove)
+    }
 
     generateTiles = (sideLength=30) => {
         let tileArr = []
@@ -74,52 +72,36 @@ class Map extends Component {
     }
 
     seeTiles = (pos=this.props.position) => {
-        //tie this to the landOnTile action - thunk?
-        //figure out how to see tiles around player and beacon immediately when map loads
         for (let y = pos[1] - 2; y <= pos[1] + 2; y++) {
             for (let x = pos[0] - 2; x <= pos[0] + 2; x++) {
                 if(this.isValid(y) && this.isValid(x)) {this.props.revealTile(this.getTile([x,y]).key)}
             }
         }
-        //revealed tiles are also on a one move delay
     }
 
     isValid = (num) => (num >= 0 && num <= 29)
 
-    handleMove = (e) => {//pass up previous tile to return it to unoccupied status
-        //currently one move delay on correct move
-        //still on one move delay with both local state and redux
-        //position changes correctly but rendering the occupied tile is one move behind
-        //check the order of when the tiles render and when the dispatches complete
-        //look up how to prevent scrolling when hitting arrow keys
-
-        // this.props.landOnTile(this.getTile().key)
-        //this erases the trail but now the player cant see where they are
-        //probably because of the one move delay problem
+    handleMove = (e) => {
         this.props.changeResource('fuel', -2)
 
         switch (e.key) {
             case 'ArrowUp':
                 if (this.props.position[1] > 0){
-                    // this.props.landOnTile(this.getTile().key)
                     this.props.moveUp(1)
                 }
                 break;
             case 'ArrowDown':
                 if (this.props.position[1] < 29){
-                    // this.props.landOnTile(this.getTile().key)
                     this.props.moveDown(1)
                 }
                 break;
             case 'ArrowRight':
                 if (this.props.position[0] < 29){
-                    // this.props.landOnTile(this.getTile().key)
                     this.props.moveRight(1)
                 }
                 break;
             case 'ArrowLeft':
                 if (this.props.position[0] > 0){
-                    // this.props.landOnTile(this.getTile().key)
                     this.props.moveLeft(1)
                 }
                 break;
@@ -128,27 +110,8 @@ class Map extends Component {
         }
         this.props.landOnTile(this.getTile().key)
         this.seeTiles()
-        //pull everything back from redux
-        //save it to an array
-        //send that to the render method
-        // this.renderTiles(this.props.tiles)
         this.props.checkGameOver()
     }
-
-    // renderTiles = (array=this.props.tiles) => {
-    //     return array.map(t => {
-    //         return <Tile
-    //             key={t.key}
-    //             defaultIcon={t.defaultIcon} 
-    //             playerIcon={t.playerIcon}
-    //             event={t.event}
-    //             occupied={t.occupied}
-    //             hidden={t.hidden}
-    //             xcoord={t.xcoord} 
-    //             ycoord={t.ycoord}
-    //             visited={t.visited}/>
-    //     })
-    // }
 
     componentWillUnmount = () => {
         this.props.clearMap()
@@ -158,9 +121,8 @@ class Map extends Component {
     render() {
         return(
             <>
-            <button onClick={() => this.props.endGame()}>End Game Testing Button</button>
+            {/* <button onClick={() => this.props.endGame()}>End Game Testing Button</button> */}
             <InventoryPanel />
-            {/* {console.log(this.props.tiles)} */}
             <div className='map'>
                 {this.props.tiles.map(t => {
                     return <Tile
@@ -174,7 +136,6 @@ class Map extends Component {
                         ycoord={t.ycoord}
                         visited={t.visited}/>
                 })}
-                {/* {this.renderTiles()} */}
             </div>
             </>
         )
@@ -190,9 +151,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        createMap : (tiles) => dispatch(createMap(tiles)),
-        landOnTile: (key) => dispatch({type:'LAND_ON_TILE', payload: key}),//dispatch another action to reveal tiles
-        revealTile: (key) => dispatch({type: 'REVEAL_TILE', payload: key}),
+        createMap: (tiles) => dispatch(createMap(tiles)),
+        landOnTile: (key) => dispatch(landOnTile(key)),//dispatch another action to reveal tiles
+        revealTile: (key) => dispatch(revealTile(key)),
         clearMap: () => dispatch(clearMap()),
         moveRight: (dist) => dispatch(moveRight(dist)),
         moveLeft: (dist) => dispatch(moveLeft(dist)),

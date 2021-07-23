@@ -25,7 +25,6 @@ function EventModal(props) {
     }
 
     const canAfford = (cost) => {
-        // debugger
         return Object.keys(cost).every(r => props.player[r] >= cost[r])
     }
 
